@@ -1,0 +1,72 @@
+const USER = "Belen192226";
+const PASS = "Fran192226";
+
+let productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+// Mostrar productos siempre
+mostrarProductos();
+
+function login() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+
+  if(user === USER && pass === PASS) {
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("adminPanel").classList.remove("hidden");
+    alert("Bienvenida Admin! Ahora podés agregar o eliminar productos.");
+    mostrarProductos();
+  } else {
+    alert("Usuario o contraseña incorrectos");
+  }
+}
+
+function mostrarProductos(filtro = "") {
+  const contenedor = document.getElementById("productos");
+  contenedor.innerHTML = "";
+
+  productos
+    .filter(p => p.nombre.toLowerCase().includes(filtro.toLowerCase()))
+    .forEach((p, i) => {
+      contenedor.innerHTML += `
+        <div class="card">
+          <img src="${p.foto}" alt="${p.nombre}">
+          <h3>${p.nombre}</h3>
+          <p>${p.descripcion}</p>
+          <p><b>$${p.precio}</b></p>
+          ${document.getElementById("adminPanel").classList.contains("hidden") ? "" : `<button onclick="eliminarProducto(${i})">Eliminar</button>`}
+        </div>
+      `;
+    });
+}
+
+function agregarProducto() {
+  const nombre = document.getElementById("nombre").value;
+  const precio = document.getElementById("precio").value;
+  const descripcion = document.getElementById("descripcion").value;
+  const foto = document.getElementById("foto").value;
+
+  if(!nombre || !precio || !descripcion || !foto) {
+    alert("Completa todos los campos");
+    return;
+  }
+
+  productos.push({ nombre, precio, descripcion, foto });
+  localStorage.setItem("productos", JSON.stringify(productos));
+  mostrarProductos();
+}
+
+function eliminarProducto(i) {
+  productos.splice(i, 1);
+  localStorage.setItem("productos", JSON.stringify(productos));
+  mostrarProductos();
+}
+
+function filtrarProductos() {
+  const valor = document.getElementById("search").value;
+  mostrarProductos(valor);
+}
+
+// Registrar Service Worker
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}

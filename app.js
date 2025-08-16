@@ -13,10 +13,10 @@ function login() {
   if(user === USER && pass === PASS) {
     document.getElementById("login").classList.add("hidden");
     document.getElementById("adminPanel").classList.remove("hidden");
-    alert("Bienvenida Admin! Ahora podés agregar o eliminar productos.");
+    alert("Bienvenida Admin! Ahora podÃ©s agregar o eliminar productos.");
     mostrarProductos();
   } else {
-    alert("Usuario o contraseña incorrectos");
+    alert("Usuario o contraseÃ±a incorrectos");
   }
 }
 
